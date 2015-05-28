@@ -15,9 +15,12 @@
 #define __AVR__
 extern "C" void __cxa_pure_virtual() {;}
 
+uint16_t XY( uint8_t x, uint8_t y);
+void DrawOneFrame( byte startHue8, int8_t yHueDelta8, int8_t xHueDelta8);
 //
 //
 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\mega\pins_arduino.h" 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"
 #include <LED_Matrix.ino>
+#include <CPPFile1.cpp>
