@@ -5,6 +5,7 @@
  * Author: Tobias Nuss
  */ 
 #include "FastLED.h"
+#include "smartmatrix_t3.h"
 
 #define LED_PIN  3
 
@@ -35,18 +36,7 @@ uint16_t XY( uint8_t x, uint8_t y)
 CRGB leds_plus_safety_pixel[ NUM_LEDS + 1];
 CRGB* leds( leds_plus_safety_pixel + 1);
 
-void DrawOneFrame( byte startHue8, int8_t yHueDelta8, int8_t xHueDelta8)
-{
-	byte lineStartHue = startHue8;
-	for( byte y = 0; y < kMatrixHeight; y++) {
-		lineStartHue += yHueDelta8;
-		byte pixelHue = lineStartHue;
-		for( byte x = 0; x < kMatrixWidth; x++) {
-			pixelHue += xHueDelta8;
-			leds[ XY(x, y)]  = CHSV( pixelHue, 255, 255);
-		}
-	}
-}
+
 
 void setup()
 {
@@ -56,23 +46,36 @@ void setup()
 
 void loop()
 {
-	uint32_t ms = millis();
-	int32_t yHueDelta32 = ((int32_t)cos16( ms * (27/1) ) * (350 / kMatrixWidth));
-	int32_t xHueDelta32 = ((int32_t)cos16( ms * (39/1) ) * (310 / kMatrixHeight));
-	DrawOneFrame( ms / 65536, yHueDelta32 / 32768, xHueDelta32 / 32768);
-	if( ms < 5000 ) {
-		FastLED.setBrightness( scale8( BRIGHTNESS, (ms * 256) / 5000));
-		} else {
-		FastLED.setBrightness(BRIGHTNESS);
-	}
-	FastLED.show();
+	DrawOneFrame( millis()/65536, ((int32_t)cos16( millis() * (27/1) ) * (350 / kMatrixWidth))/32768, ((int32_t)cos16( millis() * (39/1) ) * (310 / kMatrixHeight))/32768);	
+	SayHello();
 }
 
 
 
+void DrawOneFrame( byte startHue8, int8_t yHueDelta8, int8_t xHueDelta8)
+{
+	byte lineStartHue = startHue8;
+	for( byte y = 0; y < kMatrixHeight; y++) 
+	{
+		lineStartHue += yHueDelta8;
+		byte pixelHue = lineStartHue;
+		for( byte x = 0; x < kMatrixWidth; x++) 
+		{
+			pixelHue += xHueDelta8;
+			leds[ XY(x, y)]  = CHSV( pixelHue, 255, 255);
+		}
+	}
+	if( millis() < 5000 ) 
+		FastLED.setBrightness( scale8( BRIGHTNESS, (millis() * 256) / 5000));
+	else 
+		FastLED.setBrightness(BRIGHTNESS);
+	FastLED.show();
+}
 
+void SayHello()
+{
 
-
+}
 
 
 
