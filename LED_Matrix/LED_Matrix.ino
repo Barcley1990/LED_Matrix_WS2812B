@@ -4,11 +4,12 @@
  * Created: 5/28/2015 2:21:42 PM
  * Author: Tobias Nuss
  */ 
+#include "FastLED.h"
 
 #define LED_PIN  3
 
 #define COLOR_ORDER GRB
-#define CHIPSET     WS2811
+#define CHIPSET     WS2812B
 
 #define BRIGHTNESS 64
 
@@ -31,6 +32,8 @@ uint16_t XY( uint8_t x, uint8_t y)
 }
 
 #define NUM_LEDS (kMatrixWidth * kMatrixHeight)
+CRGB leds_plus_safety_pixel[ NUM_LEDS + 1];
+CRGB* leds( leds_plus_safety_pixel + 1);
 
 void DrawOneFrame( byte startHue8, int8_t yHueDelta8, int8_t xHueDelta8)
 {
